@@ -1,3 +1,4 @@
+var bcrypt = require("bcryptjs");
 const User = require("../models/user.model.js");
 
 // Create and Save a new User
@@ -12,7 +13,8 @@ exports.create = (req, res) => {
 	// Create a User
 	const user = new User({
 		username: req.body.username,
-		password: req.body.password,
+		password: bcrypt.hashSync(req.body.password, 10), // 密碼進行加密
+		active: false, // 預設為未登入
 	});
 
 	// Save User in the database
@@ -54,7 +56,22 @@ exports.findOneUsername = (req, res) => {
 };
 
 // Login
-exports.login = (req, res) => {
-	
-	
+exports.signin = (req, res) => {
+	User.findByUsernameAndPassword(req.body.username, req.body.password, (err, data) => {
+		if (err) {
+			res.status(500).send({
+				message: "Error retrieving user with username or password" + req.params.username
+			});
+		}
+		else if (data) {
+			// 密碼比對
+			var passwordIsValid = bcrypt.compareSync(req.body.password, data.password);
+			if (!passwordIsValid) {
+				res.send({message: "密碼錯誤",});
+			}
+			else {
+				res.send({message: "成功登入",});
+			}
+		}
+	});
 };

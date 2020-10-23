@@ -9,6 +9,6 @@ router.get("/users", users.findAll);
 
 router.post("/checkusername", users.findOneUsername);
 
-router.post("/signin", users.login);
+router.post("/signin", users.signin);
 
 module.exports = router;

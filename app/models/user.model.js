@@ -45,6 +45,26 @@ User.findByUsername = (username, result) => {
 	});
 };
 
+User.findByUsernameAndPassword = (username, password, result) => {
+	sql.query(`SELECT * FROM user WHERE username = '${username}'`, (err, res) => {
+		if (err) {
+			console.log(err);
+			result(err, null);
+			return;
+		}
+
+		// 在user table找不到username就回傳-1
+		console.log(res);
+		if (!res.length) {
+			console.log("Username not correct.");
+			result(err, null);
+		} else {
+			console.log("Username is correct.");
+			result(null, res[0]);
+		}
+	});
+};
+
 User.getAll = result => {
 	sql.query("SELECT * FROM customers", (err, res) => {
 		if (err) {
