@@ -14,13 +14,14 @@ exports.create = (req, res) => {
 	const user = new User({
 		username: req.body.username,
 		password: bcrypt.hashSync(req.body.password, 10), // 密碼進行加密
-		active: false, // 預設為未登入
+		//active: false, // 預設為未登入
 	});
 
 	// Save User in the database
 	User.create(user, (err, data) => {
 		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
 		if (data){
+			console.log(data);
 			res.send(data);
 		} else if (err) {
 			res.status(500).send({
@@ -59,18 +60,19 @@ exports.findOneUsername = (req, res) => {
 exports.signin = (req, res) => {
 	User.findByUsernameAndPassword(req.body.username, req.body.password, (err, data) => {
 		if (err) {
-			res.status(500).send({
-				message: "Error retrieving user with username or password" + req.params.username
-			});
+			// res.status(500).send({
+			// 	message: "Error retrieving user with username or password" + req.params.username
+			// });
+			res.send({message: 0,});
 		}
 		else if (data) {
 			// 密碼比對
 			var passwordIsValid = bcrypt.compareSync(req.body.password, data.password);
 			if (!passwordIsValid) {
-				res.send({message: "密碼錯誤",});
+				res.send({message: -1,});
 			}
 			else {
-				res.send({message: "成功登入",});
+				res.send({message: 1,});
 			}
 		}
 	});
