@@ -63,13 +63,13 @@ exports.signin = (req, res) => {
 			// res.status(500).send({
 			// 	message: "Error retrieving user with username or password" + req.params.username
 			// });
-			res.send({message: 0,});
+			res.send(500, {message: 0,});
 		}
 		else if (data) {
 			// 密碼比對
 			var passwordIsValid = bcrypt.compareSync(req.body.password, data.password);
 			if (!passwordIsValid) {
-				res.send({message: -1,});
+				res.send(500, {message: -1,});
 			}
 			else {
 				res.send({message: 1,});
