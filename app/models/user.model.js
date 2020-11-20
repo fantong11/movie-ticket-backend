@@ -3,7 +3,6 @@ const sql = require("./db.js");
 const User = function (user) {
 	this.username = user.username;
 	this.password = user.password;
-	//this.active = user.active;
 	// 將來新增的其他屬性
 };
 

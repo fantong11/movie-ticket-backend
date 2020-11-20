@@ -11,4 +11,6 @@ router.post("/user/usernameCheck", users.findOneUsername);
 
 router.post("/user/signIn", users.signin);
 
+router.post("/user/authenticate", users.authenticate);
+
 module.exports = router;

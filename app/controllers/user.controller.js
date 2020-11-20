@@ -1,5 +1,7 @@
-var bcrypt = require("bcryptjs");
 const User = require("../models/user.model.js");
+const config = require("../config/user.config");
+var bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
 
 // Create and Save a new User
 exports.create = (req, res) => {
@@ -14,13 +16,12 @@ exports.create = (req, res) => {
 	const user = new User({
 		username: req.body.username,
 		password: bcrypt.hashSync(req.body.password, 10), // 密碼進行加密
-		//active: false, // 預設為未登入
 	});
 
 	// Save User in the database
 	User.create(user, (err, data) => {
 		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
-		if (data){
+		if (data) {
 			console.log(data);
 			res.send(data);
 		} else if (err) {
@@ -60,20 +61,46 @@ exports.findOneUsername = (req, res) => {
 exports.signin = (req, res) => {
 	User.findByUsernameAndPassword(req.body.username, req.body.password, (err, data) => {
 		if (err) {
-			// res.status(500).send({
-			// 	message: "Error retrieving user with username or password" + req.params.username
-			// });
-			res.send(500, {message: 0,});
+			res.send(500, { message: "User Not found." });
 		}
 		else if (data) {
 			// 密碼比對
 			var passwordIsValid = bcrypt.compareSync(req.body.password, data.password);
 			if (!passwordIsValid) {
-				res.send(500, {message: -1,});
+				res.send(500, {
+					accessToken: null,
+					message: "Invalid Password!",
+				});
 			}
 			else {
-				res.send({message: 1,});
+				// token只存在24小時
+				var token = jwt.sign({ id: data.id }, config.secret, { expiresIn: 86400 });
+				res.send({
+					id: data.id,
+					username: data.username,
+					accessToken: token
+				});
 			}
 		}
 	});
+};
+
+// 刷新頁面時驗證token
+exports.authenticate = (req, res) => {
+	var token = req.body.token;
+	if (token) {
+		jwt.verify(token, config.secret, (err, decoded) => {
+			if (err) {
+				res.send(500, { success: false, message: 'Failed to authenticate token.' });
+			} else {
+				res.send({
+					id: decoded.id,
+					success: true,
+					message: 'Success to authenticate token.'
+				});
+			}
+		});
+	} else {
+		res.send(403, { success: false, message: 'No token provided' });
+	}
 };
