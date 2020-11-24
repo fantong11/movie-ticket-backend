@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", require("./app/routes/user.routes.js"));
+app.use("/api", require("./app/routes/movie.routes.js"));
 
 // set port, listen for requests
 app.listen(3000, () => {
