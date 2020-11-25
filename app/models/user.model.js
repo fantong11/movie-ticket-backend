@@ -65,14 +65,14 @@ User.findByUsernameAndPassword = (username, password, result) => {
 };
 
 User.getAll = result => {
-	sql.query("SELECT * FROM customers", (err, res) => {
+	sql.query("SELECT * FROM user", (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
 			return;
 		}
 
-		console.log("customers: ", res);
+		console.log("user: ", res);
 		result(null, res);
 	});
 };

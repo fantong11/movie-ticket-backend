@@ -13,7 +13,16 @@ Movie.create = (newMovie, result) => {
 }
 
 Movie.getAll = result => {
+    sql.query("SELECT * FROM movie", (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
 
+		console.log("user: ", res);
+		result(null, res);
+	});
 };
 
 module.exports = Movie;
