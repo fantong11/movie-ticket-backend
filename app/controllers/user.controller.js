@@ -3,6 +3,8 @@ const config = require("../config/user.config");
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 
+
+
 // Create and Save a new User
 exports.create = (req, res) => {
 	// Validate request
@@ -58,9 +60,10 @@ exports.findOneUsername = (req, res) => {
 };
 
 // Login
-exports.signin = (req, res) => {
+exports.signin = (req, res) => {	
 	User.findByUsernameAndPassword(req.body.username, req.body.password, (err, data) => {
 		if (err) {
+			
 			res.send(500, { message: "User Not found." });
 		}
 		else if (data) {
@@ -83,6 +86,7 @@ exports.signin = (req, res) => {
 			}
 		}
 	});
+	
 };
 
 // 刷新頁面時驗證token
