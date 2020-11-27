@@ -25,4 +25,17 @@ Movie.getAll = result => {
 	});
 };
 
+Movie.getOne = (id, result) => {
+    sql.query(`SELECT * FROM movie Where id = '${id}'`, (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+
+		console.log("user: ", res[0]);
+		result(null, res[0]);
+	});
+};
+
 module.exports = Movie;
