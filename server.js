@@ -9,11 +9,7 @@ app.use(bodyParser.json());
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
-});
-
+app.use("/api", require("./app/routes/auth.routes.js"));
 app.use("/api", require("./app/routes/user.routes.js"));
 app.use("/api", require("./app/routes/movie.routes.js"));
 

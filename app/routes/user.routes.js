@@ -1,19 +1,20 @@
 var express = require("express");
 var router = express.Router();
-const users = require("../controllers/user.controller.js");
+const { authJwt } = require("../middleware");
+const users = require("../controllers/user.controller");
 
-// Create a new User
-router.post("/user/signUp", users.create);
+// Admin 頁面需要的資料
+router.post(
+    "/user/admin",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    users.adminBoard
+);
 
-router.get("/user/users", users.findAll);
-
-// Check if user is exist
-router.post("/user/usernameCheck", users.findOneUsername);
-
-// User login
-router.post("/user/signIn", users.signin);
-
-// User authentication
-router.post("/user/authenticate", users.authenticate);
+// Member 頁面需要的資料
+router.post(
+    "/user/member",
+    [authJwt.verifyToken, authJwt.isMember],
+    users.memberBoard
+);
 
 module.exports = router;
