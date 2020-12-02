@@ -13,7 +13,7 @@ Movie.create = (newMovie, result) => {
 }
 
 Movie.getAll = result => {
-    sql.query("SELECT * FROM movie", (err, res) => {
+    sql.query("SELECT * FROM movie ", (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -37,5 +37,26 @@ Movie.getOne = (id, result) => {
 		result(null, res[0]);
 	});
 };
+Movie.getAllBeforeReleaseDate = result => {
+    sql.query("SELECT id, name, nameEN, picPath, release_date FROM movie WHERE release_date <= CURDATE()", (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+		
+		result(null, res);
+	});
+};
+Movie.getAllAfterReleaseDate = result => {
+    sql.query("SELECT id, name, nameEN, picPath, release_date FROM movie WHERE release_date > CURDATE()", (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
 
+		result(null, res);
+	});
+};
 module.exports = Movie;

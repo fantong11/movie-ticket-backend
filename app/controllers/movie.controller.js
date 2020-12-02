@@ -19,3 +19,23 @@ exports.findOne = (req, res) => {
         res.send(data)
     });
 }
+exports.findAllBeforeOrAfter = (req, res) => {
+    let release = req.query.release;
+    if(release === "coming"){
+        Movie.getAllAfterReleaseDate((err, data) => {
+            if (err) {
+                return res.status(500).send({message: err.message});
+            }
+            res.send(data)
+        });
+    }
+    else if(release === "now"){
+        Movie.getAllBeforeReleaseDate((err, data) => {
+            if (err) {
+                return res.status(500).send({message: err.message});
+            }
+            res.send(data)
+        });
+
+    }
+}
