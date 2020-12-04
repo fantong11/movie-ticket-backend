@@ -56,8 +56,8 @@ Theater.getOneByMovieId = (movieId, result) => {
 			return;
 		}
 
-		console.log(res[0]);
-		result(null, res[0]);
+		console.log(res);
+		result(null, res);
 	});
 }
 
