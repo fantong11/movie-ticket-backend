@@ -5,7 +5,7 @@ const Theater = function (theater) {
 }
 
 Theater.create = (newTheater, result) => {
-	sql.query("INSERT INTO user SET ?", newTheater, (err, res) => {
+	sql.query("INSERT INTO THEATER SET ?", newTheater, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(err, null);

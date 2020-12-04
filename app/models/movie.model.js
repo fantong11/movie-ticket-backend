@@ -14,13 +14,12 @@ const Movie = function (movie) {
 }
 
 Movie.create = (newMovie, result) => {
-	sql.query("INSERT INTO user SET ?", newMovie, (err, res) => {
+	sql.query("INSERT INTO MOVIE SET ?", newMovie, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(err, null);
 			return;
 		}
-
 		result(null, { id: res.insertId, ...newMovie });
 	});
 };

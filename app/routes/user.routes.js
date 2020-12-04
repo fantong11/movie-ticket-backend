@@ -5,7 +5,7 @@ const users = require("../controllers/user.controller");
 
 // Admin 頁面需要的資料
 router.post(
-    "/user/admin",
+    "/user/adminBoard",
     [authJwt.verifyToken, authJwt.isAdmin],
     users.adminBoard
 );
@@ -16,5 +16,6 @@ router.post(
     [authJwt.verifyToken, authJwt.isMember],
     users.memberBoard
 );
+
 
 module.exports = router;
