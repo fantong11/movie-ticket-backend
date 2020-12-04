@@ -19,6 +19,7 @@ exports.findOne = (req, res) => {
         res.send(data)
     });
 }
+
 exports.findAllBeforeOrAfter = (req, res) => {
     let release = req.query.release;
     if(release === "coming"){

@@ -1,16 +1,29 @@
 const sql = require("./db.js");
 
 const Movie = function (movie) {
-    this.title = movie.title;
-    this.titleEN = movie.titleEN;
-    this.pic_path = movie.pic_path;
-    this.description = moive.description;
-    //  還有一堆還沒想到的成員
+	this.name = movie.name;
+	this.name_en = movie.name_en;
+	this.pic_path = movie.pic_path;
+	this.description = movie.description;
+	this.running_time = movie.running_time;
+	this.director = movie.director;
+	this.actors = movie.actors;
+	this.movie_type = movie.movie_type;
+	this.classification = movie.classification;
+	this.release_date = movie.release_date;
 }
 
 Movie.create = (newMovie, result) => {
+	sql.query("INSERT INTO user SET ?", newMovie, (err, res) => {
+		if (err) {
+			console.log(err);
+			result(err, null);
+			return;
+		}
 
-}
+		result(null, { id: res.insertId, ...newMovie });
+	});
+};
 
 Movie.getAll = result => {
     sql.query("SELECT * FROM MOVIE ", (err, res) => {
@@ -20,7 +33,7 @@ Movie.getAll = result => {
 			return;
 		}
 
-		console.log("user: ", res);
+		console.log(res);
 		result(null, res);
 	});
 };
@@ -33,10 +46,11 @@ Movie.getOne = (id, result) => {
 			return;
 		}
 
-		console.log("user: ", res[0]);
+		console.log(res[0]);
 		result(null, res[0]);
 	});
 };
+
 Movie.getAllBeforeReleaseDate = result => {
     sql.query("SELECT id, name, name_en, pic_path, release_date FROM MOVIE WHERE release_date <= CURDATE()", (err, res) => {
 		if (err) {
@@ -44,10 +58,11 @@ Movie.getAllBeforeReleaseDate = result => {
 			result(null, err);
 			return;
 		}
-		
+
 		result(null, res);
 	});
 };
+
 Movie.getAllAfterReleaseDate = result => {
     sql.query("SELECT id, name, name_en, pic_path, release_date FROM MOVIE WHERE release_date > CURDATE()", (err, res) => {
 		if (err) {
@@ -59,4 +74,5 @@ Movie.getAllAfterReleaseDate = result => {
 		result(null, res);
 	});
 };
+
 module.exports = Movie;

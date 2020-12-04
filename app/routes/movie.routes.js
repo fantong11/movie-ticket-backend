@@ -9,5 +9,4 @@ router.get("/movie/movieList", movies.findAllBeforeOrAfter);
 router.get("/movie/movie", movies.findOne);
 
 
-
 module.exports = router;
