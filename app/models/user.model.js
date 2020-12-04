@@ -8,7 +8,7 @@ const User = function (user) {
 };
 
 User.create = (newUser, result) => {
-	sql.query("INSERT INTO user SET ?", newUser, (err, res) => {
+	sql.query("INSERT INTO USER SET ?", newUser, (err, res) => {
 		if (err) {
 			// 用error code來判斷是否重複，也許以後需要用到switch case
 			if (err.code === "ER_DUP_ENTRY" && err.errno === 1062) {
@@ -25,7 +25,7 @@ User.create = (newUser, result) => {
 };
 
 User.findByUsername = (username, result) => {
-	sql.query(`SELECT * FROM user WHERE username = '${username}'`, (err, res) => {
+	sql.query(`SELECT * FROM USER WHERE username = '${username}'`, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(err, null);
@@ -44,7 +44,7 @@ User.findByUsername = (username, result) => {
 };
 
 User.findById = (id, result) => {
-	sql.query(`SELECT * FROM user WHERE id = '${id}'`, (err, res) => {
+	sql.query(`SELECT * FROM USER WHERE id = '${id}'`, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(err, null);

@@ -3,7 +3,7 @@ const sql = require("./db.js");
 const Movie = function (movie) {
     this.title = movie.title;
     this.titleEN = movie.titleEN;
-    this.picPath = movie.picPath;
+    this.pic_path = movie.pic_path;
     this.description = moive.description;
     //  還有一堆還沒想到的成員
 }
@@ -13,7 +13,7 @@ Movie.create = (newMovie, result) => {
 }
 
 Movie.getAll = result => {
-    sql.query("SELECT * FROM movie ", (err, res) => {
+    sql.query("SELECT * FROM MOVIE ", (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -26,7 +26,7 @@ Movie.getAll = result => {
 };
 
 Movie.getOne = (id, result) => {
-    sql.query(`SELECT * FROM movie Where id = '${id}'`, (err, res) => {
+    sql.query(`SELECT * FROM MOVIE Where id = '${id}'`, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -38,7 +38,7 @@ Movie.getOne = (id, result) => {
 	});
 };
 Movie.getAllBeforeReleaseDate = result => {
-    sql.query("SELECT id, name, nameEN, picPath, release_date FROM movie WHERE release_date <= CURDATE()", (err, res) => {
+    sql.query("SELECT id, name, name_en, pic_path, release_date FROM MOVIE WHERE release_date <= CURDATE()", (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -49,7 +49,7 @@ Movie.getAllBeforeReleaseDate = result => {
 	});
 };
 Movie.getAllAfterReleaseDate = result => {
-    sql.query("SELECT id, name, nameEN, picPath, release_date FROM movie WHERE release_date > CURDATE()", (err, res) => {
+    sql.query("SELECT id, name, name_en, pic_path, release_date FROM MOVIE WHERE release_date > CURDATE()", (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
