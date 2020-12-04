@@ -42,4 +42,23 @@ Theater.getOne = (id, result) => {
 	});
 };
 
+// 用movieId去找對應的theater
+Theater.getOneByMovieId = (movieId, result) => {
+	sql.query(`SELECT id, name 
+				FROM PLAY_IN, THEATER 
+				WHERE 
+					PLAY_IN.movie_id = ${movieId}
+					AND PLAY_IN.theater_id = THEATER.id 
+				GROUP BY THEATER.id;`, (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+
+		console.log(res[0]);
+		result(null, res[0]);
+	});
+}
+
 module.exports = Theater;

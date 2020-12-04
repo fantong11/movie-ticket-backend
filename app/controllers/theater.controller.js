@@ -7,7 +7,7 @@ exports.findAll = (req, res) => {
         }
         res.send(data);
     });
-}
+};
 
 exports.findOne = (req, res) => {
     let id = req.query.theaterid;
@@ -15,6 +15,16 @@ exports.findOne = (req, res) => {
         if (err) {
             return res.status(500).send({message: err.message});
         }
-        res.send(data)
+        res.send(data);
     });
 }
+
+exports.findOneByMovieId = (req, res) => {
+    let movieId = req.query.movieid;
+    Theater.getOneByMovieId(movieId, (err, data) => {
+        if (err) {
+            return res.status(500).send({message: err.message});
+        }
+        res.send(data);
+    });
+};

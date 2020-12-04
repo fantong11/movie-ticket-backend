@@ -5,6 +5,6 @@ const theaters = require("../controllers/theater.controller.js");
 router.get("/theater/theaterList", theaters.findAll);
 
 // Find one movie by id
-router.get("/theater/theater", theaters.findOne);
+router.get("/theater/theater", theaters.findOneByMovieId);
 
 module.exports = router;
