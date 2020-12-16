@@ -14,7 +14,7 @@ const Movie = function (movie) {
 }
 
 Movie.create = (newMovie, result) => {
-	sql.query("INSERT INTO MOVIE SET ?", newMovie, (err, res) => {
+	sql.query(`INSERT INTO MOVIE SET ?`, newMovie, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(err, null);
@@ -25,7 +25,7 @@ Movie.create = (newMovie, result) => {
 };
 
 Movie.getAll = result => {
-    sql.query("SELECT * FROM MOVIE ", (err, res) => {
+    sql.query(`SELECT * FROM MOVIE `, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -51,7 +51,10 @@ Movie.getOne = (id, result) => {
 };
 
 Movie.getAllBeforeReleaseDate = result => {
-    sql.query("SELECT id, name, name_en, pic_path, release_date FROM MOVIE WHERE release_date <= CURDATE()", (err, res) => {
+	sql.query(`SELECT id, name, name_en, pic_path, release_date 
+				FROM MOVIE 
+				WHERE 
+					release_date <= CURDATE()`, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -63,7 +66,10 @@ Movie.getAllBeforeReleaseDate = result => {
 };
 
 Movie.getAllAfterReleaseDate = result => {
-    sql.query("SELECT id, name, name_en, pic_path, release_date FROM MOVIE WHERE release_date > CURDATE()", (err, res) => {
+	sql.query(`SELECT id, name, name_en, pic_path, release_date 
+				FROM MOVIE 
+				WHERE 
+					release_date > CURDATE()`, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
