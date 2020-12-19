@@ -1,7 +1,7 @@
 module.exports = {
-    HOST: "movie-ticket.cbxjseltmuka.us-east-2.rds.amazonaws.com",
-    USER: "orth",
-    PASSWORD: "1Q2w3E4r",
+    HOST: "25.32.95.208",
+    USER: "admin",
+    PASSWORD: "1234",
     DB: "movie",
     PORT: "3306"
 };
