@@ -9,7 +9,9 @@ Showing.getTime = (movieId, theaterId, result) => {
 				WHERE 
 					P.movie_id = '${movieId}' and 
 					P.theater_id = '${theaterId}' and 
-					P.showing_id = S.id
+					P.showing_id = S.id and
+					P.movie_id = M.id and
+    				P.theater_id = T.id
 				GROUP BY S.id`, (err, res) => {
 		if (err) {
 			console.log(err);
