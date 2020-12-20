@@ -40,6 +40,7 @@ exports.findAllBeforeOrAfter = (req, res) => {
 
     }
 }
+
 exports.addMovie = (req,res) => {
     const movie = new Movie({
 		name: req.body.name,
@@ -52,9 +53,8 @@ exports.addMovie = (req,res) => {
         movie_type: req.body.movie_type,
         classification: req.body.classification,
         release_date: req.body.release_date,
-
-	});
-    Movie.create((err, data) => {
+    });
+    Movie.create(movie, (err, data) => {
 		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
 		if (data) {
 			console.log(data);
