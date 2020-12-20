@@ -20,4 +20,16 @@ Showing.getTime = (movieId, theaterId, result) => {
 		result(null, res);
 	});
 };
+
+Showing.create = (newShowing, result) => {
+	sql.query(`INSERT INTO MOVIE SET ?`, newShowing, (err, res) => {
+		if (err) {
+			console.log(err);
+			result(err, null);
+			return;
+		}
+		result(null, { id: res.insertId, ...newShowing });
+	});
+};
+
 module.exports = Showing; 

@@ -11,3 +11,23 @@ exports.findTime = (req, res) => {
         res.send(data)
     });
 }
+
+exports.addShowing = (req,res) => {
+    const showing = new Showing({
+		movie: req.body.movie,
+        theater: req.body.theater,
+        showing_date: req.body.showing_date,
+        showing_time: req.body.showing_time,
+	});
+    Showing.create(showing, (err, data) => {
+		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
+		if (data) {
+			console.log(data);
+			return res.send(data);
+		} 
+		res.status(500).send({
+			message:
+				err.message || "Some error occurred while creating the Movie."
+		});
+	});
+}
