@@ -9,10 +9,10 @@ router.get("/movie/movieList", movies.findAllBeforeOrAfter);
 // Find one movie by id
 router.get("/movie/movie", movies.findOne);
 
-router.get(
+router.post(
     "/movie/addMovie", 
     [authJwt.verifyToken, authJwt.isAdmin], 
-    movies.addMovie
+    movies.addMovie,
 );
 
 module.exports = router;
