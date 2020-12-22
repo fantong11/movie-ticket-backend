@@ -5,7 +5,7 @@ exports.findOne = (req, res) => {
     console.log("movie id = " + id);
     Movie.getOne(id, (err, data) => {
         if (err) {
-            return res.status(500).send({message: err.message});
+            return res.status(500).send({ message: err.message });
         }
         res.send(data)
     });
@@ -13,18 +13,18 @@ exports.findOne = (req, res) => {
 
 exports.findAllBeforeOrAfter = (req, res) => {
     let release = req.query.release;
-    if(release === "coming"){
+    if (release === "coming") {
         Movie.getAllAfterReleaseDate((err, data) => {
             if (err) {
-                return res.status(500).send({message: err.message});
+                return res.status(500).send({ message: err.message });
             }
             res.send(data)
         });
     }
-    else if(release === "now"){
+    else if (release === "now") {
         Movie.getAllBeforeReleaseDate((err, data) => {
             if (err) {
-                return res.status(500).send({message: err.message});
+                return res.status(500).send({ message: err.message });
             }
             res.send(data)
         });
@@ -39,9 +39,9 @@ exports.findAllBeforeOrAfter = (req, res) => {
     }
 }
 
-exports.addMovie = (req,res) => {
+exports.addMovie = (req, res) => {
     const movie = new Movie({
-		name: req.body.name,
+        name: req.body.name,
         name_en: req.body.name_en,
         pic_path: req.body.pic_path,
         description: req.body.description,
@@ -53,14 +53,28 @@ exports.addMovie = (req,res) => {
         release_date: req.body.release_date,
     });
     Movie.create(movie, (err, data) => {
-		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
-		if (data) {
-			console.log(data);
-			return res.send(data);
-		} 
-		res.status(500).send({
-			message:
-				err.message || "Some error occurred while creating the Movie."
-		});
-	});
+        // 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
+        if (data) {
+            console.log(data);
+            return res.send(data);
+        }
+        res.status(500).send({
+            message:
+                err.message || "Some error occurred while creating the Movie."
+        });
+    });
+}
+exports.deleteMovie = (req, res) => {
+    console.log(req.body.deleteId);
+    let idList = [];
+    for (let i = 0; i < req.body.deleteId.length; i++) {
+        idList.push(req.body.deleteId[i].id)
+    }
+    console.log(idList);
+    Movie.deleteMovie(idList, (err, data) => {
+        if (err) {
+            return res.status(500).send({ message: err.message });
+        }
+        res.send(data)
+    });
 }
