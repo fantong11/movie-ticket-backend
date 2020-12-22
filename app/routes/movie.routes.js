@@ -4,9 +4,8 @@ const movies = require("../controllers/movie.controller.js");
 const { authJwt } = require("../middleware");
 
 // Find all before and after release_date movie
-router.get("/movie/movieListFake", movies.findAllBeforeOrAfter);
-// Find all Movie
-router.get("/movie/movieList", movies.findAll);
+router.get("/movie/movieList", movies.findAllBeforeOrAfter);
+
 // Find one movie by id
 router.get("/movie/movie", movies.findOne);
 
