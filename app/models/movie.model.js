@@ -80,16 +80,4 @@ Movie.getAllAfterReleaseDate = result => {
 	});
 };
 
-Movie.getName = result => {
-	sql.query(`SELECT name FROM MOVIE`, (err, res) => {
-		if (err) {
-			console.log(err);
-			result(null, err);
-			return;
-		}
-
-		result(null, res);
-	});
-};
-
 module.exports = Movie;

@@ -64,12 +64,3 @@ exports.addMovie = (req,res) => {
 		});
 	});
 }
-
-exports.findAllMovieName = (req, res) => {
-    Movie.getName((err, data) => {
-        if (err) {
-            return res.status(500).send({message: err.message});
-        }
-        res.send(data);
-    });
-}
