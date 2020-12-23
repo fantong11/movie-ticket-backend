@@ -1,7 +1,8 @@
 const sql = require("./db.js");
 
 const Showing = function (showing) {
-	this.showing_time = theater.showing_time;
+	this.show_time = showing.showingDatetime;
+	this.audio=showing.showingAudio;
 }
 Showing.getTime = (movieId, theaterId, result) => {
 	sql.query(`SELECT S.id, show_time, T.name theaterName, M.name movieName
@@ -9,7 +10,9 @@ Showing.getTime = (movieId, theaterId, result) => {
 				WHERE 
 					P.movie_id = '${movieId}' and 
 					P.theater_id = '${theaterId}' and 
-					P.showing_id = S.id
+					P.showing_id = S.id and
+					P.movie_id = M.id and
+    				P.theater_id = T.id
 				GROUP BY S.id`, (err, res) => {
 		if (err) {
 			console.log(err);
@@ -23,7 +26,7 @@ Showing.getTime = (movieId, theaterId, result) => {
 };
 
 Showing.create = (newShowing, result) => {
-	sql.query(`INSERT INTO MOVIE SET ?`, newShowing, (err, res) => {
+	sql.query(`INSERT INTO SHOWING SET ?`, newShowing, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(err, null);

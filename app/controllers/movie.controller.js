@@ -37,7 +37,14 @@ exports.findAllBeforeOrAfter = (req, res) => {
             }
             res.send(data)
         });
-
+    }
+    else if (release === "all") {
+        Movie.getAll((err, data) => {
+            if (err) {
+                return res.status(500).send({message: err.message});
+            }
+            res.send(data);
+        });
     }
 }
 
