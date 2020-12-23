@@ -34,5 +34,22 @@ Showing.create = (newShowing, result) => {
 		result(null, { id: res.insertId, ...newShowing });
 	});
 };
+Showing.getDetailShowing = (showingId, result) => {
+	sql.query(`select movie.name movieName,movie.name_en,showing.show_time,theater.name theaterName,showing.audio
+				from play_in,movie,theater,showing
+				where 
+					play_in.theater_id = theater.id and 
+					play_in.movie_id = movie.id and 
+					showing.id = play_in.showing_id and 
+					showing.id = '${showingId}'`, (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
 
+		console.log(res);
+		result(null, res);
+	});
+};
 module.exports = Showing; 
