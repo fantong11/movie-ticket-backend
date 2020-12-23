@@ -14,10 +14,8 @@ exports.findTime = (req, res) => {
 
 exports.addShowing = (req,res) => {
     const showing = new Showing({
-		movie: req.body.movie,
-        theater: req.body.theater,
-        showing_date: req.body.showing_date,
-        showing_time: req.body.showing_time,
+        showing_datetime: req.body.showing_datetime,
+        showing_audio: req.body.showing_audio,
 	});
     Showing.create(showing, (err, data) => {
 		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
