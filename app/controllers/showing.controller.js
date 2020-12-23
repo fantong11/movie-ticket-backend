@@ -22,11 +22,11 @@ exports.findDetailShowing = (req,res) => {
 }
 exports.addShowing = (req,res) => {
     const showing = new Showing({
-		movie: req.body.movie,
-        theater: req.body.theater,
-        showing_date: req.body.showing_date,
-        showing_time: req.body.showing_time,
-	});
+        showingDatetime: req.body.showingDatetime,
+        showingAudio: req.body.showingAudio,
+    });
+    console.log('test1235201029:'+ showing)
+    console.log('test1235201029:'+ req.body.showingAudio)
     Showing.create(showing, (err, data) => {
 		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
 		if (data) {
