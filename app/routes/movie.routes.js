@@ -6,6 +6,9 @@ const { authJwt } = require("../middleware");
 // Find all before and after release_date movie
 router.get("/movie/movieList", movies.findAllBeforeOrAfter);
 
+//Find all movie name
+router.get("/movie/movieName", movies.findAllMovieName);
+
 // Find one movie by id
 router.get("/movie/movie", movies.findOne);
 
