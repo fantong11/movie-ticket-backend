@@ -1,7 +1,9 @@
 const sql = require("./db.js");
 
 const PlayIn = function (playIn) {
-	this.name = playIn.name;
+	this.theater_id = playIn.PlayIn_theaterId;
+	this.movie_id = playIn.PlayIn_movieId;
+	this.showing_id = playIn.PlayIn_showingId;
 }
 
 PlayIn.create = (newPlayIn, result) => {
