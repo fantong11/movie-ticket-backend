@@ -15,7 +15,7 @@ router.get("/showing/showingDetail", showings.findDetailShowing);
 //從資料庫拿showing table裡的資料
 
 router.post("/showing/deleteShowing", 
-    //[authJwt.verifyToken, authJwt.isAdmin], 
+    [authJwt.verifyToken, authJwt.isAdmin], 
     showings.deleteShowing);
 //從資料庫刪除showing
 
