@@ -26,10 +26,9 @@ Showing.getTime = (movieId, theaterId, result) => {
 };
 
 Showing.create = (newShowing, result) => {
-	sql.query(`INSERT INTO SHOWING SET ?`, newShowing, (err, res) => {
+	sql.query(`INSERT INTO SHOWING SET ? ;`, newShowing, (err, res) => {
 		if (err) {
 			console.log(err);
-			result(err, null);
 			return;
 		}
 		result(null, { id: res.insertId, ...newShowing });
@@ -37,10 +36,58 @@ Showing.create = (newShowing, result) => {
 };
 
 Showing.getShowingDetail = result => {
-	sql.query(`select m.name,t.name location,s.show_time,
-			   s.audio,s.id showing_id from movie m,showing s,
-			   play_in p,theater t where m.id=p.movie_id and
-				s.id=p.showing_id and p.theater_id=t.id; `, (err, res) => {
+	sql.query(`select 
+				m.name,
+				t.name location,
+				s.show_time,
+				s.audio,
+				s.id showing_id 
+			   from 
+				movie m,
+				showing s,
+				play_in p,
+				theater t 
+			   where 
+			    m.id=p.movie_id and
+				s.id=p.showing_id and 
+				p.theater_id=t.id; `
+		, (err, res) => {
+			if (err) {
+				console.log(err);
+				result(null, err);
+				return;
+			}
+			console.log(res);
+			result(null, res);
+		});
+},
+	Showing.createPlayIn = (movie_id, theater_id, showing_id, result) => {
+		newPlayIn = { 'theater_id': theater_id, 'movie_id': movie_id, 'showing_id': showing_id };
+		sql.query(`INSERT INTO PLAY_IN SET ?`, newPlayIn, (err, res) => {
+			if (err) {
+				console.log(err);
+				result(err, null);
+				return;
+			}
+			result(null, newPlayIn);
+		});
+	};
+
+Showing.getDetailShowing = (showingId, result) => {
+	sql.query(`select 
+					movie.name as movieName, 
+					movie.name_en as movieNameEn, 
+					showing.show_time as showTime, 
+					theater.name as theaterName, 
+					showing.audio as theaterAudio
+				from 
+					play_in,movie, 
+					theater,showing
+				where 
+					play_in.theater_id = theater.id and 
+					play_in.movie_id = movie.id and 
+					showing.id = play_in.showing_id and 
+					showing.id = '${showingId}'`, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -48,6 +95,23 @@ Showing.getShowingDetail = result => {
 		}
 		console.log(res);
 		result(null, res);
+	});
+};
+
+Showing.deleteShowingAndPlayIn = (idList, result) => {
+	sql.query(`DELETE FROM PLAY_IN WHERE showing_id IN (?);`, [idList], (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+		}
+		sql.query(`DELETE FROM SHOWING WHERE id IN (?);`, [idList], (err, res) => {
+			if (err) {
+				console.log(err);
+				result(null, err);
+				return;
+			}
+			result(null, res);
+		});
 	});
 };
 

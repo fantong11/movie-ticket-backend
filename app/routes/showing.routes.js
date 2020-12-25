@@ -10,6 +10,8 @@ router.post(
     [authJwt.verifyToken, authJwt.isAdmin], 
     showings.addShowing,
 );
+router.get("/showing/showingDetail", showings.findDetailShowing);
+router.post("/showing/deleteShowing", showings.deleteShowing);
 
 router.get("/showing/deleteShowing", showings.getShowingDetail);
 
