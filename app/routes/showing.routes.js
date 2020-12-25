@@ -4,7 +4,8 @@ const showings = require("../controllers/showing.controller.js");
 const { authJwt } = require("../middleware");
 
 router.get("/showing/movietime", showings.findTime);
-router.get("/showing/", showings.findDetailShowing);
+
+router.get("/showing/showingDetail", showings.findDetailShowing);
 
 router.post(
     "/showing/addShowing", 

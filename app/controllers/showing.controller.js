@@ -11,6 +11,7 @@ exports.findTime = (req, res) => {
         res.send(data)
     });
 }
+
 exports.findDetailShowing = (req,res) => {
     let showingId = req.query.showingid;
     Showing.getDetailShowing(showingId, (err, data) => {
@@ -20,6 +21,7 @@ exports.findDetailShowing = (req,res) => {
         res.send(data)
     });
 }
+
 exports.addShowing = (req,res) => {
     const showing = new Showing({
         showingDatetime: req.body.showingDatetime,
