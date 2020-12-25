@@ -13,6 +13,6 @@ router.post(
 router.get("/showing/showingDetail", showings.findDetailShowing);
 router.post("/showing/deleteShowing", showings.deleteShowing);
 
-router.get("/showing/deleteShowing", showings.getShowingDetail);
+router.get("/showing/deleteShowingDelete", showings.getShowingDetail);
 
 module.exports = router;

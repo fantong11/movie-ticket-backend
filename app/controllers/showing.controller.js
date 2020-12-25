@@ -38,6 +38,7 @@ exports.addShowing = (req,res) => {
     let movie_id = req.body.playInMovieId;
     let theater_id = req.body.playInTheaterId;
     let showing_id = '';
+    console.log(req.body.playInMovieId,req.body.playInTheaterId);
     Showing.create(showing, (err, data) => {
         // 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
         if (data) {
