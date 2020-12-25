@@ -11,6 +11,15 @@ exports.findTime = (req, res) => {
         res.send(data)
     });
 }
+exports.findDetailShowing = (req, res) => {
+    let showingId = req.query.showingid;
+    Showing.getDetailShowing(showingId, (err, data) => {
+        if (err) {
+            return res.status(500).send({ message: err.message });
+        }
+        res.send(data)
+    });
+}
 
 exports.addShowing = (req, res) => {
     const showing = new Showing({
@@ -37,3 +46,18 @@ exports.addShowing = (req, res) => {
         }
     });
 }
+
+exports.deleteShowing = (req, res) => {
+    console.log(req.body.deleteId);
+    let idList = [];
+    for (let i = 0; i < req.body.deleteId.length; i++) {
+        idList.push(req.body.deleteId[i].id)
+    }
+    Showing.deleteShowingAndPlayIn(idList, (err, data) => {
+        if (err) {
+            return res.status(500).send({ message: err.message });
+        }
+        res.send(data)
+    });
+}
+
