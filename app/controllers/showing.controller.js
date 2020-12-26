@@ -1,11 +1,20 @@
 const Showing = require("../models/showing.model.js");
 
-
 exports.findTime = (req, res) => {
     let movieId = req.query.movieid;
     let theaterId = req.query.theaterid;
     Showing.getTime(movieId, theaterId, (err, data) => {
         if (err) {
+            return res.status(500).send({message: err.message});
+        }
+        res.send(data)
+    });
+}
+
+exports.findDetailShowing = (req,res) => {
+    let showingId = req.query.showingid;
+    Showing.getDetailShowing(showingId, (err, data) => {
+		if (err) {
             return res.status(500).send({message: err.message});
         }
         res.send(data)
@@ -31,3 +40,4 @@ exports.addShowing = (req,res) => {
 		});
 	});
 }
+
