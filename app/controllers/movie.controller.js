@@ -1,7 +1,5 @@
 const Movie = require("../models/movie.model");
 
-<<<<<<< HEAD
-=======
 exports.findAll = (req, res) => {
     Movie.getAll((err, data) => {
         if (err) {
@@ -10,8 +8,6 @@ exports.findAll = (req, res) => {
         res.send(data);
     });
 }
-
->>>>>>> origin/Orth
 exports.findOne = (req, res) => {
     let id = req.query.movieid;
     console.log("movie id = " + id);
