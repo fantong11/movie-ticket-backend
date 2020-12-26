@@ -60,4 +60,5 @@ Showing.getDetailShowing = (showingId, result) => {
 		result(null, res);
 	});
 };
+
 module.exports = Showing; 

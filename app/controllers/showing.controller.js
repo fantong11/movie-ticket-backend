@@ -1,6 +1,5 @@
 const Showing = require("../models/showing.model.js");
 
-
 exports.findTime = (req, res) => {
     let movieId = req.query.movieid;
     let theaterId = req.query.theaterid;
