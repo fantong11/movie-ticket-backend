@@ -5,7 +5,6 @@ const User = require("../models/user.model");
 // 執行user動作前，先驗證token
 verifyToken = (req, res, next) => {
     let token = req.body.token;
-    console.log(token);
     if (!token) {
         return res.status(403).send({
             success: false, message: 'No token provided'
