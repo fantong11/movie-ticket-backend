@@ -72,7 +72,7 @@ exports.signin = (req, res) => {
 
 // 刷新頁面時驗證token
 exports.authenticate = (req, res) => {
-	var token = req.body.token;
+	let token = req.body.token;
 	if (!token) {
 		return res.send(403, { success: false, message: 'No token provided' });
 	}

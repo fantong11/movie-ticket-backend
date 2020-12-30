@@ -18,8 +18,7 @@ Seat.addSeat = (seatData, result) =>{
 }
 
 Seat.getSeatByShowingId = (showing_id, result) => {
-    console.log("==================================================" + showing_id);
-    sql.query(`Select seat.id, seat.seat_row_column
+    sql.query(`Select seat.seat_row_column
                 from seat
                 where seat.showing_id = '${showing_id}'`, (err, res) => {
             if (err) {
