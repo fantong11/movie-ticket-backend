@@ -1,12 +1,24 @@
 const sql = require("./db.js");
 
-const Order = function (movie) {
-	this.price = order_list.price;
-	this.status = order.status;
-	this.deadline = order.deadline;
+const Order = function (order) {
+	this.price = order.price;
+	this.order_time = order.order_time;
 	this.user_id = order.user_id;
-	this.id = order.id;
 }
+
+Order.addOrder = (newOrder, result) => {
+	// 新增order
+	console.log()
+    sql.query(`INSERT INTO order_list set ?`, newOrder, (err, res) => {
+        if (err) {
+            result(null, err);
+            return;
+        }
+        console.log("新增order成功");
+        result(null, res);
+    });
+}
+
 Order.getOrder =(userId, result) => {
     sql.query(`SELECT id,order_time, price FROM order_list where user_id = '${userId}'`, (err, res) => {
 		if (err) {
@@ -14,8 +26,6 @@ Order.getOrder =(userId, result) => {
 			result(null, err);
 			return;
 		}
-
-		console.log(res);
 		result(null, res);
 	});
 };

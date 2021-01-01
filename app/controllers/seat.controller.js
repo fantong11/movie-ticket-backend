@@ -2,7 +2,7 @@ const Seat = require("../models/seat.model.js");
 
 exports.addSeat = (req, res) => {
     //新增哪場showing中被選中的那些座位 ["A1", "A2", "A3"] 
-    let seatNameList = req.body.selectedSeat;
+    let seatNameList = req.body.seat;
     let showingId = req.body.showingId;
     let seatData = "";
     //["A1","A2","A3"] ->  "("A1", 10), ("A2", 10), ("A3", 10)"
