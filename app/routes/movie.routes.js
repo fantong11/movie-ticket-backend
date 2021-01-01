@@ -15,4 +15,6 @@ router.post(
     movies.addMovie,
 );
 
+router.post("/movie/deleteMovie", movies.deleteMovie);
+
 module.exports = router;

@@ -80,4 +80,17 @@ Movie.getAllAfterReleaseDate = result => {
 	});
 };
 
+Movie.deleteMovie = (idList ,result) => {
+	sql.query(`DELETE FROM play_in WHERE movie_id IN (?)`,[idList]);
+	sql.query(`DELETE FROM MOVIE WHERE id IN (?)
+			`, [idList], (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+		result(null, res);
+	});
+};
+
 module.exports = Movie;
