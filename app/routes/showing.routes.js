@@ -3,6 +3,12 @@ var router = express.Router();
 const showings = require("../controllers/showing.controller.js");
 const { authJwt } = require("../middleware");
 
+router.get("/showing/showingDetail", showings.findDetailShowing);
+//從資料庫拿showing table裡的資料
+
+router.get("/showing/showingDetailDelete", showings.getShowingDetail);
+//從資料庫根據playIn table拿出所有有關showing的影廳與電影資料
+
 router.get("/showing/movietime", showings.findTime);
 
 router.post(
@@ -10,5 +16,11 @@ router.post(
     [authJwt.verifyToken, authJwt.isAdmin], 
     showings.addShowing,
 );
+<<<<<<< HEAD
+=======
+//從資料庫刪除showing
+
+
+>>>>>>> origin/Orth
 
 module.exports = router;
