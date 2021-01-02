@@ -1,3 +1,5 @@
+const UIDGenerator = require('uid-generator');
+const uidgen = new UIDGenerator();
 var moment = require('moment');
 const Order = require("../models/order.model.js");
 
@@ -12,6 +14,7 @@ exports.addOrder = async (req, res) => {
         price: sum,
         order_time: mysqlTimestamp,
         user_id: req.userId,
+        uid: await uidgen.generate(),
     });
 
     // 同步處理 先處理完order_list，再處理Seat，再處理OrderProduct
@@ -21,6 +24,7 @@ exports.addOrder = async (req, res) => {
         orderForeignKey = data.insertId;
         console.log(orderForeignKey);
     }).catch((err) => {
+        console.log(err);
         return res.status(501).send({ message: err.message });
     });
 
@@ -28,6 +32,7 @@ exports.addOrder = async (req, res) => {
     await Order.addSeat(seatData).then((data) => {
         console.log(data);
     }).catch((err) => {
+        console.log(err);
         return res.status(502).send({ message: err.message });
     });
 
@@ -45,6 +50,7 @@ exports.addOrder = async (req, res) => {
 exports.findOrder = (req, res) => {
     Order.getOrder(req.userId, (err, data) => {
         if (err) {
+            console.log(err);
             return res.status(500).send({ message: err.message });
         }
         res.send(data)
