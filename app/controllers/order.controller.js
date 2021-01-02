@@ -1,11 +1,22 @@
 var moment = require('moment');
 const Order = require("../models/order.model.js");
+const Promocode = require("../models/promocode.model.js");
 
 exports.addOrder = (req, res) => {
+    var data111;
+    let sum = 0;
+    Promocode.getData((err1, data1) => {
+        if (err1) {
+            return res.status(500).send({ message: err.message });
+        }
+        data111 = data1;
+        sum = convertSum(order, coupon, data111);
+        console.log("MOTHER FUCKER" + data111[0].code_number);
+    });
     let order = JSON.parse(req.body.order);
     let seatList = JSON.parse(req.body.seat);
     let showing_id = parseInt(req.body.showingId);
-    let sum = convertSum(order);
+    let coupon = parseInt(req.body.coupon);
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
     const newOrder = new Order({
         price: sum,
@@ -56,11 +67,16 @@ const convertSeatList = (seatList, showing_id, orderListId) => {
     return seatData;
 }
 
-const convertSum = (order) => {
+const convertSum = (order, coupon, promocodeData) => {
     // 計算總價格
     let sum = 0;
     for (let i = 0; i < order.length; i++) {
         sum += order[i].qty * order[i].cost;
+    }
+    // console.log("SHDASKFLASJFK" + promocodeData[0].code_number);
+    // console.log("dddddddddddddddddddd" + promocodeData);
+    if (coupon === promocodeData[0].code_number) {
+        sum -= promocodeData[0].discount_price;
     }
     return sum;
 }

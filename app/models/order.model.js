@@ -4,6 +4,7 @@ const Order = function (order) {
 	this.price = order.price;
 	this.order_time = order.order_time;
 	this.user_id = order.user_id;
+	this.coupon = order.coupon;
 }
 
 Order.addOrderProduct = (orderProductData, result) => {
@@ -56,4 +57,5 @@ Order.getOrder =(userId, result) => {
 		result(null, res);
 	});
 };
+
 module.exports = Order;

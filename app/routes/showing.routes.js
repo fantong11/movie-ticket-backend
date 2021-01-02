@@ -16,11 +16,8 @@ router.post(
     [authJwt.verifyToken, authJwt.isAdmin], 
     showings.addShowing,
 );
-<<<<<<< HEAD
-=======
 //從資料庫刪除showing
 
 
->>>>>>> origin/Orth
 
 module.exports = router;
