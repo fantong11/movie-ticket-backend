@@ -1,37 +1,44 @@
 var moment = require('moment');
 const Order = require("../models/order.model.js");
 
-exports.addOrder = (req, res) => {
+exports.addOrder = async (req, res) => {
     let order = JSON.parse(req.body.order);
     let seatList = JSON.parse(req.body.seat);
     let showing_id = parseInt(req.body.showingId);
     let sum = convertSum(order);
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+
     const newOrder = new Order({
         price: sum,
         order_time: mysqlTimestamp,
         user_id: req.userId,
     });
-    Order.addOrder(newOrder, (err, data) => {
+
+    // 同步處理 先處理完order_list，再處理Seat，再處理OrderProduct
+    let orderForeignKey;
+    await Order.addOrder(newOrder).then((data) => {
         // 先新增order_list，等等seat跟order_product需要用到Id
-        if (err) {
-            return res.status(500).send({ message: err.message });
-        }
-        let seatData = convertSeatList(seatList, showing_id, data.insertId);
-        Order.addSeat(seatData, (seat_err, seat_data) => {
-            // 新增座位與訂單id
-            if (seat_err) {
-                return res.status(500).send({ message: seat_err.message });
-            }
-            let orderProductData = convertOrder(order, data.insertId);
-            Order.addOrderProduct(orderProductData, (orderProduct_err, orderProduct_data) => {
-                // 把訂單與product詳情連起來
-                if (orderProduct_err) {
-                    return res.status(500).send({ message: seat_err.message });
-                }
-                res.send(data)
-            })
-        });
+        orderForeignKey = data.insertId;
+        console.log(orderForeignKey);
+    }).catch((err) => {
+        return res.status(501).send({ message: err.message });
+    });
+
+    let seatData = await convertSeatList(seatList, showing_id, orderForeignKey);
+    await Order.addSeat(seatData).then((data) => {
+        console.log(data);
+    }).catch((err) => {
+        return res.status(502).send({ message: err.message });
+    });
+
+    let orderProductData = await convertOrder(order, orderForeignKey);
+    await Order.addOrderProduct(orderProductData).then((data) => {
+        // 把訂單與product詳情連起來
+        res.send({ message: "Add order succeed!" });
+        console.log(data);
+    }).catch((err) => {
+        console.log(err);
+        res.status(503).send({ message: err.message });
     });
 }
 
