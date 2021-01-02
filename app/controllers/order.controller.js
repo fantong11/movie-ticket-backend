@@ -3,6 +3,7 @@ const Order = require("../models/order.model.js");
 const Promocode = require("../models/promocode.model.js");
 
 exports.addOrder = async (req, res) => {
+    let flag = false;
     let sum = 0;
     let order = JSON.parse(req.body.order);
     let seatList = JSON.parse(req.body.seat);
@@ -11,16 +12,22 @@ exports.addOrder = async (req, res) => {
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
     //同步處理Promocode判斷有沒有使用優惠卷
+    if (coupon === null) {
+        sum = convertSum(order, 0);
+    }
     await Promocode.getData(coupon).then((data) => {
+        console.log("Length: " + data.length);
         if (data.length === 0) {
-            sum = convertSum(order, 0);
-            return res.status(500).send({ message: err.message });
+            flag = true;
+            return res.send({ message: "Wrong coupon code" });
         }
         let promo = data[0].discount_price;
         sum = convertSum(order, promo);
     }).catch((err) => {
         return res.status(500).send({ message: err.message });
     });
+
+    if (flag === true) { return res.send({message: "ERROR!!!"})};
 
     const newOrder = new Order({
         price: sum,
@@ -49,11 +56,11 @@ exports.addOrder = async (req, res) => {
     let orderProductData = await convertOrder(order, orderForeignKey);
     await Order.addOrderProduct(orderProductData).then((data) => {
         // 把訂單與product詳情連起來
-        res.send({ message: "Add order succeed!" });
         console.log(data);
+        return res.send({ message: "Add order succeed!" });
     }).catch((err) => {
         console.log(err);
-        res.status(503).send({ message: err.message });
+        return res.status(503).send({ message: err.message });
     });
 }
 
