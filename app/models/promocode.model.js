@@ -6,15 +6,16 @@ const Promocode = function (promocode) {
 	this.expiration_time = promocode.expiration_time;
 }
 
-Promocode.getData = result => {
-    sql.query(`SELECT * FROM promo_code`, (err, res) => {
-		if (err) {
-			console.log(err);
-			result(null, err);
-			return;
-		}
-		result(null, res);
-	});
+Promocode.getData = (couponNo) => {
+    return new Promise((resolve, reject) => {
+        sql.query(`SELECT * FROM promo_code where ${couponNo} = code_number`, (err, res) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            }
+            resolve(res);
+        });
+    })
 }
 
 module.exports = Promocode;

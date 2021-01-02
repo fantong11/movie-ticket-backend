@@ -2,47 +2,58 @@ var moment = require('moment');
 const Order = require("../models/order.model.js");
 const Promocode = require("../models/promocode.model.js");
 
-exports.addOrder = (req, res) => {
-    var data111;
+exports.addOrder = async (req, res) => {
     let sum = 0;
-    Promocode.getData((err1, data1) => {
-        if (err1) {
-            return res.status(500).send({ message: err.message });
-        }
-        data111 = data1;
-        sum = convertSum(order, coupon, data111);
-        console.log("MOTHER FUCKER" + data111[0].code_number);
-    });
     let order = JSON.parse(req.body.order);
     let seatList = JSON.parse(req.body.seat);
     let showing_id = parseInt(req.body.showingId);
     let coupon = parseInt(req.body.coupon);
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+
+    //同步處理Promocode判斷有沒有使用優惠卷
+    await Promocode.getData(coupon).then((data) => {
+        if (data.length === 0) {
+            sum = convertSum(order, 0);
+            return res.status(500).send({ message: err.message });
+        }
+        let promo = data[0].discount_price;
+        sum = convertSum(order, promo);
+    }).catch((err) => {
+        return res.status(500).send({ message: err.message });
+    });
+
     const newOrder = new Order({
         price: sum,
         order_time: mysqlTimestamp,
         user_id: req.userId,
+        // coupon: coupon,
     });
-    Order.addOrder(newOrder, (err, data) => {
+
+    // 同步處理 先處理完order_list，再處理Seat，再處理OrderProduct
+    let orderForeignKey;
+    await Order.addOrder(newOrder).then((data) => {
         // 先新增order_list，等等seat跟order_product需要用到Id
-        if (err) {
-            return res.status(500).send({ message: err.message });
-        }
-        let seatData = convertSeatList(seatList, showing_id, data.insertId);
-        Order.addSeat(seatData, (seat_err, seat_data) => {
-            // 新增座位與訂單id
-            if (seat_err) {
-                return res.status(500).send({ message: seat_err.message });
-            }
-            let orderProductData = convertOrder(order, data.insertId);
-            Order.addOrderProduct(orderProductData, (orderProduct_err, orderProduct_data) => {
-                // 把訂單與product詳情連起來
-                if (orderProduct_err) {
-                    return res.status(500).send({ message: seat_err.message });
-                }
-                res.send(data)
-            })
-        });
+        orderForeignKey = data.insertId;
+        console.log(orderForeignKey);
+    }).catch((err) => {
+        return res.status(500).send({ message: err.message });
+    });
+
+    let seatData = await convertSeatList(seatList, showing_id, orderForeignKey);
+    await Order.addSeat(seatData).then((data) => {
+        console.log(data);
+    }).catch((err) => {
+        return res.status(500).send({ message: err.message });
+    });
+
+    let orderProductData = await convertOrder(order, orderForeignKey);
+    await Order.addOrderProduct(orderProductData).then((data) => {
+        // 把訂單與product詳情連起來
+        res.send({ message: "Add order succeed!" });
+        console.log(data);
+    }).catch((err) => {
+        console.log(err);
+        res.status(503).send({ message: err.message });
     });
 }
 
@@ -67,17 +78,13 @@ const convertSeatList = (seatList, showing_id, orderListId) => {
     return seatData;
 }
 
-const convertSum = (order, coupon, promocodeData) => {
+const convertSum = (order, discount) => {
     // 計算總價格
     let sum = 0;
     for (let i = 0; i < order.length; i++) {
         sum += order[i].qty * order[i].cost;
     }
-    // console.log("SHDASKFLASJFK" + promocodeData[0].code_number);
-    // console.log("dddddddddddddddddddd" + promocodeData);
-    if (coupon === promocodeData[0].code_number) {
-        sum -= promocodeData[0].discount_price;
-    }
+    sum -= discount;
     return sum;
 }
 
