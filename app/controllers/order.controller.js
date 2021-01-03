@@ -10,24 +10,25 @@ exports.addOrder = async (req, res) => {
     let showing_id = parseInt(req.body.showingId);
     let coupon = parseInt(req.body.coupon);
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-
     //同步處理Promocode判斷有沒有使用優惠卷
-    if (coupon === null) {
+    if (!coupon) {
         sum = convertSum(order, 0);
     }
-    await Promocode.getData(coupon).then((data) => {
-        console.log("Length: " + data.length);
-        if (data.length === 0) {
-            flag = true;
-            return res.send({ message: "Wrong coupon code" });
-        }
-        let promo = data[0].discount_price;
-        sum = convertSum(order, promo);
-    }).catch((err) => {
-        return res.status(500).send({ message: err.message });
-    });
+    else {
+        await Promocode.getData(coupon).then((data) => {
+            console.log("Length: " + data.length);
+            if (data.length === 0) {
+                flag = true;
+                return res.send({ message: "Wrong coupon code" });
+            }
+            let promo = data[0].discount_price;
+            sum = convertSum(order, promo);
+        }).catch((err) => {
+            return res.status(500).send({ message: err.message });
+        });
+    }
 
-    if (flag === true) { return res.send({message: "ERROR!!!"})};
+    if (flag === true) { return res.send({ message: "ERROR!!!" }) };
 
     const newOrder = new Order({
         price: sum,
