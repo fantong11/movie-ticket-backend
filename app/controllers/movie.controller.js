@@ -8,6 +8,7 @@ exports.findAll = (req, res) => {
         res.send(data);
     });
 }
+
 exports.findOne = (req, res) => {
     let id = req.query.movieid;
     console.log("movie id = " + id);
