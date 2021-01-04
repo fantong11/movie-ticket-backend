@@ -4,6 +4,23 @@ const Showing = function (showing) {
 	this.show_time = showing.showingDatetime;
 	this.audio = showing.showingAudio;
 }
+
+Showing.findShowingByMovieId = (idList, result) => {
+	let showing_id = [];
+	sql.query(`select s.id 
+			from movie m,showing s,play_in p
+			where p.movie_id in (?) 
+			and p.showing_id = s.id and m.id = p.movie_id`, [idList], (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+		res.forEach((showing) => { showing_id.push(showing.id); });
+		result(null, showing_id);
+	});
+}
+
 Showing.getTime = (movieId, theaterId, result) => {
 	//從play_in table裡根據movie_id找出有關這場電影的所有影廳與showing資訊
 	sql.query(`SELECT S.id, show_time, T.name theaterName, M.name movieName
