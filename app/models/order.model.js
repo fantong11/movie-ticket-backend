@@ -5,6 +5,7 @@ const Order = function (order) {
 	this.order_time = order.order_time;
 	this.user_id = order.user_id;
 	this.coupon = order.coupon;
+	this.uid = order.uid;
 }
 
 Order.addOrderProduct = (orderProductData) => {
