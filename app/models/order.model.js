@@ -5,74 +5,47 @@ const Order = function (order) {
     this.order_time = order.order_time;
     this.user_id = order.user_id;
     this.uid = order.uid;
+    this.coupon = order.coupon;
 }
 
-Order.addOrderProduct = (orderProductData, result) => {
-	// 此為order_list和product的關聯，透過order_id對應到那筆訂單得購買詳情
-	// (order_list_id為order_list的foreign key, product_id為product的foreign key, amount)
-	// console.log("orderProductData" + orderProductData);
-	sql.query(`INSERT INTO order_product VALUES ${orderProductData};`, (err, res) => {
-        if (err) {
-            result(err, null);
-            return;
-        };
-        console.log("新增orderProduct成功");
-        result(null, res);
-    });
-}
-
-Order.addSeat = (seatData, result) => {
-	// 新增哪場showing中被選中的那些座位 ["A1", "A2", "A3"] 
-	// console.log("seatData:" + seatData);
-	sql.query(`INSERT INTO SEAT (seat_row_column, showing_id, order_id) VALUES ${seatData};`, (err, res) => {
-        if (err) {
-            result(err, null);
-            return;
-        }
-        console.log("新增seat成功");
-        result(null, res);
-    });
-}
-
-Order.addOrder = (newOrder, result) => {
+Order.createOrder = (newOrder, result) => {
     // 新增order
-        sql.query(`INSERT INTO order_list set ?`, newOrder, (err, res) => {
-            if (err) {
-                console.log(err);
-                result(null, err);
-            }
-            console.log("新增order成功");
-            result(null, res);
-        });
-
-}
-
-Order.getOrderSeat = (userId, result) => {
-    sql.query(`select *  from all_order_seat where UIDD = '${userId}'`, (err, res) => {
+    sql.query(`INSERT INTO order_list set ?`, newOrder, (err, res) => {
         if (err) {
             console.log(err);
-            result(null, err);
+            result(err, null);
+        }
+        console.log("新增order成功");
+        console.log(res.insertId);
+        result(null, { insertId: res.insertId, ...newOrder });
+    });
+}
+
+Order.getOrder = (userId, result) => {
+    sql.query(`SELECT id, order_time, price FROM order_list where user_id = '${userId}'`, (err, res) => {
+        if (err) {
+            console.log(err);
+            result(err, null);
+        }
+        result(null, res);
+    });
+}
+Order.getOrderSeat = (userId, result) => {
+    sql.query(`SELECT * FROM all_drink where user_id = '${userId}'`, (err, res) => {
+        if (err) {
+            console.log(err);
+            result(err, null);
         }
         result(null, res);
     });
 }
 Order.getOrderDrink = (userId, result) => {
-    sql.query(`select *  from all_drink where UIDD = '${userId}'`, (err, res) => {
+    sql.query(`SELECT * FROM all_order_seat where user_id = '${userId}'`, (err, res) => {
         if (err) {
             console.log(err);
-            result(null, err);
+            result(err, null);
         }
         result(null, res);
     });
 }
-Order.getOrder = (userId, result) => {
-    sql.query(`SELECT id,order_time, price FROM order_list where user_id = '${userId}'`, (err, res) => {
-		if (err) {
-			console.log(err);
-			result(err, null);
-			return;
-		}
-		result(null, res);
-	});
-};
 module.exports = Order;
