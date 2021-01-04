@@ -64,7 +64,7 @@ exports.addMovie = (req, res) => {
     Movie.create(movie, (err, data) => {
         // 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
         if (data) {
-            console.log(data);
+            console.log("movie: ", data);
             return res.send(data);
         }
         res.status(500).send({
@@ -74,12 +74,12 @@ exports.addMovie = (req, res) => {
     });
 }
 exports.deleteMovie = (req, res) => {
-    console.log(req.body.deleteId);
+    console.log("delete_id: ",req.body.deleteId);
     let idList = [];
     for (let i = 0; i < req.body.deleteId.length; i++) {
         idList.push(req.body.deleteId[i].id)
     }
-    console.log(idList);
+    console.log("delete_id: ", idList);
     Movie.deleteMovie(idList, (err, data) => {
         if (err) {
             return res.status(500).send({ message: err.message });
