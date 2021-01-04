@@ -1,6 +1,5 @@
 const Showing = require("../models/showing.model.js");
 
-
 exports.findTime = (req, res) => {
     let movieId = req.query.movieid;
     let theaterId = req.query.theaterid;
@@ -12,8 +11,9 @@ exports.findTime = (req, res) => {
     });
 }
 exports.findDetailShowing = (req, res) => {
+    //從資料庫拿showing table裡的資料
     let showingId = req.query.showingid;
-    Showing.getDetailShowing(showingId, (err, data) => {
+    Showing.getDetailShowingByShowingId(showingId, (err, data) => {
         if (err) {
             return res.status(500).send({ message: err.message });
         }
@@ -22,6 +22,7 @@ exports.findDetailShowing = (req, res) => {
 }
 
 exports.getShowingDetail = (req, res) => {
+    //從資料庫根據playIn table拿出所有有關showing的影廳與電影資料
     Showing.getShowingDetail((err, data) => {
         if (err) {
             return res.status(500).send({message: err.message});
@@ -31,6 +32,7 @@ exports.getShowingDetail = (req, res) => {
 }
 
 exports.addShowing = (req,res) => {
+    //加入showing
     const showing = new Showing({
         showingDatetime: req.body.showingDatetime,
         showingAudio: req.body.showingAudio,
@@ -58,6 +60,7 @@ exports.addShowing = (req,res) => {
 }
 
 exports.deleteShowing = (req, res) => {
+    //從資料庫刪除showing
     console.log(req.body.deleteId);
     let idList = [];
     for (let i = 0; i < req.body.deleteId.length; i++) {
