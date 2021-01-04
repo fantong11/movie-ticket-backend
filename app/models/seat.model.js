@@ -1,7 +1,7 @@
 const sql = require("./db.js");
 
 const Seat = function (seat) {
-    this.showing_id = showing.showing_id;
+    this.showing_id = seat.showing_id;
 }
 
 Seat.getSeatByShowingId = (showing_id, result) => {
@@ -14,7 +14,7 @@ Seat.getSeatByShowingId = (showing_id, result) => {
                 return;
             }
 
-            console.log(res);
+            console.log("seat : ", res);
             result(null, res);
         });
 }

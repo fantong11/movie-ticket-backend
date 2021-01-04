@@ -23,9 +23,9 @@ exports.signup = (req, res) => {
 	User.create(user, (err, data) => {
 		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
 		if (data) {
-			console.log(data);
+			console.log("user: ", data);
 			return res.send(data);
-		} 
+		}
 		res.status(500).send({
 			message:
 				err.message || "Some error occurred while creating the Customer."

@@ -9,7 +9,7 @@ exports.addPlayIn = (req, res) => {
     PlayIn.create(playIn, (err, data) => {
 		// 傳data回前端當作錯誤判斷，沒data就回傳錯誤訊息
 		if (data) {
-			console.log(data);
+			console.log("play in : ", data);
 			return res.send(data);
 		} 
 		res.status(500).send({

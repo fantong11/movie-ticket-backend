@@ -20,7 +20,7 @@ Showing.getTime = (movieId, theaterId, result) => {
 			return;
 		}
 
-		console.log(res);
+		console.log("showing time: ", res);
 		result(null, res);
 	});
 };
@@ -57,7 +57,7 @@ Showing.getDetailShowing = (showingId, result) => {
 			return;
 		}
 
-		console.log(res);
+		console.log("Showing Detail: ", res);
 		result(null, res);
 	});
 };
