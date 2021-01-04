@@ -80,22 +80,6 @@ Movie.getAllAfterReleaseDate = result => {
 	});
 };
 
-Movie.findShowingByMovieId = (idList, result) => {
-	let showing_id = [];
-	sql.query(`select s.id 
-			from movie m,showing s,play_in p
-			where p.movie_id in (?) 
-			and p.showing_id = s.id and m.id = p.movie_id`, [idList], (err, res) => {
-		if (err) {
-			console.log(err);
-			result(null, err);
-			return;
-		}
-		res.forEach((showing) => { showing_id.push(showing.id); });
-		result(null, showing_id);
-	});
-}
-
 Movie.deletePlayIn = (idList, result) => {
 	sql.query(`DELETE FROM play_in WHERE movie_id IN (?)`, [idList], (err, res) => {
 		if (err) {
