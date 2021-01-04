@@ -7,11 +7,13 @@ exports.addOrder = (req, res) => {
     let showing_id = parseInt(req.body.showingId);
     let sum = convertSum(order);
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+
     const newOrder = new Order({
         price: sum,
         order_time: mysqlTimestamp,
         user_id: req.userId,
     });
+    
     Order.addOrder(newOrder, (err, data) => {
         // 先新增order_list，等等seat跟order_product需要用到Id
         if (err) {

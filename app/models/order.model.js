@@ -12,7 +12,7 @@ Order.addOrderProduct = (orderProductData, result) => {
 	// console.log("orderProductData" + orderProductData);
 	sql.query(`INSERT INTO order_product VALUES ${orderProductData};`, (err, res) => {
         if (err) {
-            result(null, err);
+            result(err, null);
             return;
         };
         console.log("新增orderProduct成功");
@@ -25,7 +25,7 @@ Order.addSeat = (seatData, result) => {
 	// console.log("seatData:" + seatData);
 	sql.query(`INSERT INTO SEAT (seat_row_column, showing_id, order_id) VALUES ${seatData};`, (err, res) => {
         if (err) {
-            result(null, err);
+            result(err, null);
             return;
         }
         console.log("新增seat成功");
@@ -50,7 +50,7 @@ Order.getOrder =(userId, result) => {
     sql.query(`SELECT id,order_time, price FROM order_list where user_id = '${userId}'`, (err, res) => {
 		if (err) {
 			console.log(err);
-			result(null, err);
+			result(err, null);
 			return;
 		}
 		result(null, res);
