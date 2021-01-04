@@ -13,7 +13,7 @@ exports.addOrder = async (req, res) => {
     let showing_id = parseInt(req.body.showingId);
     let coupon = parseInt(req.body.coupon);
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-    let newOrder;
+    // let newOrder;
 
     console.log(orders);
     console.log(seatList);
@@ -23,13 +23,13 @@ exports.addOrder = async (req, res) => {
     if (isNaN(coupon)) {
         sum = convertSum(orders, 0);
         console.log("No code sum: " + sum);
-        newOrder = new Order({
-            price: sum,
-            order_time: mysqlTimestamp,
-            user_id: req.userId,
-            uid: await uidgen.generate(),
-            coupon: null,
-        });
+        // newOrder = new Order({
+        //     price: sum,
+        //     order_time: mysqlTimestamp,
+        //     user_id: req.userId,
+        //     uid: await uidgen.generate(),
+        //     coupon: null,
+        // });
     }
     else {
         await Promocode.findCode(coupon).then((data) => {
@@ -40,13 +40,13 @@ exports.addOrder = async (req, res) => {
             sum = convertSum(orders, promo);
             console.log("Code sum:" + sum);
 
-            newOrder = new Order({
-                price: sum,
-                order_time: mysqlTimestamp,
-                user_id: req.userId,
-                uid: await uidgen.generate(),
-                coupon: data.id,
-            });
+            // newOrder = new Order({
+            //     price: sum,
+            //     order_time: mysqlTimestamp,
+            //     user_id: req.userId,
+            //     uid: await uidgen.generate(),
+            //     coupon: data.id,
+            // });
         }).catch((err) => {
             return res.status(500).send({ message: err.message });
         });
@@ -73,6 +73,13 @@ exports.addOrder = async (req, res) => {
                 res.send({ message: "Add order succeed!" });
             });
         });
+    });
+    const newOrder = new Order({
+        price: sum,
+        order_time: mysqlTimestamp,
+        user_id: req.userId,
+        uid: await uidgen.generate(),
+        coupon: coupon,
     });
 }
 
