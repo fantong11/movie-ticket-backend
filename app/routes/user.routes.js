@@ -4,8 +4,6 @@ const { authJwt } = require("../middleware");
 const users = require("../controllers/user.controller");
 const orders = require("../controllers/order.controller.js");
 
-
-
 // Admin 頁面需要的資料
 router.post(
     "/user/adminBoard",
