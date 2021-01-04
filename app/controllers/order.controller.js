@@ -13,23 +13,12 @@ exports.addOrder = async (req, res) => {
     let showing_id = parseInt(req.body.showingId);
     let coupon = parseInt(req.body.coupon);
     let mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-    let newOrder;
-
-    console.log(orders);
-    console.log(seatList);
-    console.log(showing_id);
-    console.log(coupon);
+    
     //同步處理Promocode判斷有沒有使用優惠卷
     if (isNaN(coupon)) {
         sum = convertSum(orders, 0);
         console.log("No code sum: " + sum);
-        newOrder = new Order({
-            price: sum,
-            order_time: mysqlTimestamp,
-            user_id: req.userId,
-            uid: await uidgen.generate(),
-            coupon: null,
-        });
+        coupon = null;
     }
     else {
         await Promocode.findCode(coupon).then((data) => {
@@ -38,19 +27,18 @@ exports.addOrder = async (req, res) => {
             }
             let promo = data[0].discount_price;
             sum = convertSum(orders, promo);
-            console.log("Code sum:" + sum);
-
-            newOrder = new Order({
-                price: sum,
-                order_time: mysqlTimestamp,
-                user_id: req.userId,
-                uid: await uidgen.generate(),
-                coupon: data.id,
-            });
         }).catch((err) => {
             return res.status(500).send({ message: err.message });
         });
     }
+
+    const newOrder = new Order({
+        price: sum,
+        order_time: mysqlTimestamp,
+        user_id: req.userId,
+        uid: await uidgen.generate(),
+        coupon: coupon,
+    });
 
     Order.createOrder(newOrder, (err, data) => {
         // 先新增order_list，等等seat跟order_product需要用到Id
