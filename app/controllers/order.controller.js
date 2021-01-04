@@ -1,7 +1,9 @@
+const UIDGenerator = require('uid-generator');
+const uidgen = new UIDGenerator();
 var moment = require('moment');
 const Order = require("../models/order.model.js");
 
-exports.addOrder = (req, res) => {
+exports.addOrder = async (req, res) => {
     let order = JSON.parse(req.body.order);
     let seatList = JSON.parse(req.body.seat);
     let showing_id = parseInt(req.body.showingId);
@@ -12,8 +14,9 @@ exports.addOrder = (req, res) => {
         price: sum,
         order_time: mysqlTimestamp,
         user_id: req.userId,
+        uid: await uidgen.generate(),
     });
-    
+
     Order.addOrder(newOrder, (err, data) => {
         // 先新增order_list，等等seat跟order_product需要用到Id
         if (err) {
@@ -32,7 +35,7 @@ exports.addOrder = (req, res) => {
                     return res.status(500).send({ message: seat_err.message });
                 }
                 res.send(data)
-            })
+            });
         });
     });
 }
@@ -40,6 +43,7 @@ exports.addOrder = (req, res) => {
 exports.findOrder = (req, res) => {
     Order.getOrder(req.userId, (err, data) => {
         if (err) {
+            console.log(err);
             return res.status(500).send({ message: err.message });
         }
         res.send(data)
