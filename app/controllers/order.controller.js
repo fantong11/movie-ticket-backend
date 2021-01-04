@@ -62,13 +62,6 @@ exports.addOrder = async (req, res) => {
             });
         });
     });
-    const newOrder = new Order({
-        price: sum,
-        order_time: mysqlTimestamp,
-        user_id: req.userId,
-        uid: await uidgen.generate(),
-        coupon: coupon,
-    });
 }
 
 exports.findOrder = (req, res) => {
