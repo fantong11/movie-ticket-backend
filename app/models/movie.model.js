@@ -25,7 +25,7 @@ Movie.create = (newMovie, result) => {
 };
 
 Movie.getAll = result => {
-    sql.query(`SELECT * FROM MOVIE `, (err, res) => {
+	sql.query(`SELECT * FROM MOVIE `, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -38,7 +38,7 @@ Movie.getAll = result => {
 };
 
 Movie.getOne = (id, result) => {
-    sql.query(`SELECT * FROM MOVIE Where id = '${id}'`, (err, res) => {
+	sql.query(`SELECT * FROM MOVIE Where id = '${id}'`, (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
@@ -80,14 +80,55 @@ Movie.getAllAfterReleaseDate = result => {
 	});
 };
 
-Movie.deleteMovie = (idList ,result) => {
-	sql.query(`DELETE FROM play_in WHERE movie_id IN (?)`,[idList]);
+Movie.findShowingByMovieId = (idList, result) => {
+	let showing_id = [];
+	sql.query(`select s.id 
+			from movie m,showing s,play_in p
+			where p.movie_id in (?) 
+			and p.showing_id = s.id and m.id = p.movie_id`, [idList], (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+		res.forEach((showing) => { showing_id.push(showing.id); });
+		result(null, showing_id);
+	});
+}
+
+Movie.deletePlayIn = (idList, result) => {
+	sql.query(`DELETE FROM play_in WHERE movie_id IN (?)`, [idList], (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+		console.log("刪除PLAY_IN成功");
+		result(null, res);
+	});
+	
+}
+
+Movie.deleteShowing = (idList, result) => {
+	sql.query(`DELETE FROM showing WHERE id IN (?)`, [idList], (err, res) => {
+		if (err) {
+			console.log(err);
+			result(null, err);
+			return;
+		}
+		console.log("刪除Showing成功");
+		result(null, res);
+	});
+}
+
+Movie.deleteMovie = (idList, result) => {
 	sql.query(`DELETE FROM MOVIE WHERE id IN (?)`, [idList], (err, res) => {
 		if (err) {
 			console.log(err);
 			result(null, err);
 			return;
 		}
+		console.log("刪除Movie成功");
 		result(null, res);
 	});
 };
