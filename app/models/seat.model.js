@@ -6,16 +6,17 @@ const Seat = function (seat) {
     this.order_id = seat.order_id;
 }
 
-Seat.addSeat = (seatData, result) => {
+Seat.createSeat = (newSeatSet, result) => {
     // 新增哪場showing中被選中的那些座位 ["A1", "A2", "A3"] 
     // 目前不會呼叫這個，而是透過order那裡直接加
-    sql.query(`INSERT INTO SEAT (seat_row_column, showing_id) VALUES ${seatData};`, (err, res) => {
+    sql.query("INSERT INTO SEAT (seat_row_column, showing_id, order_id) VALUES ?", [newSeatSet], (err, res) => {
         if (err) {
+            console.log(err);
             result(null, err);
             return;
         }
         console.log("新增seat成功");
-        result(null, res);
+        result(null, { id: res.insertId, ...newSeatSet });
     });
 }
 
