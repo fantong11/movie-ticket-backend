@@ -26,9 +26,13 @@ router.post(
 );
 
 router.post(
-    "/order/userOrderList", 
+    "/order/userOrderSeat", 
     [authJwt.verifyToken, authJwt.isMember],
-    orders.findOrder
+    orders.findOrderSeat
 );
-
+router.post(
+    "/order/userOrderDrink", 
+    [authJwt.verifyToken, authJwt.isMember],
+    orders.findOrderDrink
+);
 module.exports = router;

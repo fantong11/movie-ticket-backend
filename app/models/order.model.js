@@ -30,5 +30,22 @@ Order.getOrder = (userId, result) => {
         result(null, res);
     });
 }
-
+Order.getOrderDrink = (userId, result) => {
+    sql.query(`SELECT * FROM all_drink where UIDD = '${userId}'`, (err, res) => {
+        if (err) {
+            console.log(err);
+            result(err, null);
+        }
+        result(null, res);
+    });
+}
+Order.getOrderSeat = (userId, result) => {
+    sql.query(`SELECT * FROM all_order_seat where UIDD = '${userId}' ORDER BY Otime DESC`, (err, res) => {
+        if (err) {
+            console.log(err);
+            result(err, null);
+        }
+        result(null, res);
+    });
+}
 module.exports = Order;

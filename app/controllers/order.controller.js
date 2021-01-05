@@ -64,8 +64,17 @@ exports.addOrder = async (req, res) => {
     });
 }
 
-exports.findOrder = (req, res) => {
-    Order.getOrder(req.userId, (err, data) => {
+exports.findOrderSeat = (req, res) => {
+    Order.getOrderSeat(req.userId, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send({ message: err.message });
+        }
+        res.send(data)
+    });
+}
+exports.findOrderDrink = (req, res) => {
+    Order.getOrderDrink(req.userId, (err, data) => {
         if (err) {
             console.log(err);
             return res.status(500).send({ message: err.message });

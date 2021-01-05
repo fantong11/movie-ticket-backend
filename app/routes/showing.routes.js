@@ -18,6 +18,6 @@ router.post(
 );
 //從資料庫刪除showing
 
-
+router.post("/showing/deleteShowing", [authJwt.verifyToken, authJwt.isAdmin],showings.deleteShowing);
 
 module.exports = router;
