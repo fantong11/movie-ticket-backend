@@ -1,4 +1,5 @@
 const Movie = require("../models/movie.model");
+const Showing = require("../models/showing.model");
 
 exports.findAll = (req, res) => {
     Movie.getAll((err, data) => {
@@ -74,16 +75,33 @@ exports.addMovie = (req, res) => {
     });
 }
 exports.deleteMovie = (req, res) => {
-    console.log("delete_id: ",req.body.deleteId);
     let idList = [];
     for (let i = 0; i < req.body.deleteId.length; i++) {
         idList.push(req.body.deleteId[i].id)
     }
-    console.log("delete_id: ", idList);
-    Movie.deleteMovie(idList, (err, data) => {
-        if (err) {
-            return res.status(500).send({ message: err.message });
+    console.log(idList);
+    Showing.findShowingByMovieId(idList, (err_1, data_1) => {
+        if (err_1) {
+            return res.status(500).send({ message: err_1.message });
         }
-        res.send(data)
-    });
+        Movie.deletePlayIn(idList, (err_2, data_2) => {
+            if (err_2) {
+                return res.status(500).send({ message: err_2.message });
+            }
+            Movie.deleteShowing(data_1, (err_3, data_3) => {
+                if (err_3) {
+                    return res.status(500).send({ message: err_3.message });
+                }
+                Movie.deleteMovie(idList, (err, data) => {
+                    if (err) {
+                        return res.status(500).send({ message: err.message });
+                    }
+                    res.send(data)
+                });
+            })
+            
+        })
+        
+    })
+    
 }

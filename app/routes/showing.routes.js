@@ -19,5 +19,6 @@ router.post(
 //從資料庫刪除showing
 
 
+router.get("/showing/deleteShowingDelete", showings.getShowingDetail);
 
 module.exports = router;
