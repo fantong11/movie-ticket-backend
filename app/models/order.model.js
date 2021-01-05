@@ -30,8 +30,8 @@ Order.getOrder = (userId, result) => {
         result(null, res);
     });
 }
-Order.getOrderSeat = (userId, result) => {
-    sql.query(`SELECT * FROM all_drink where user_id = '${userId}'`, (err, res) => {
+Order.getOrderDrink = (userId, result) => {
+    sql.query(`SELECT * FROM all_drink where UIDD = '${userId}'`, (err, res) => {
         if (err) {
             console.log(err);
             result(err, null);
@@ -39,8 +39,8 @@ Order.getOrderSeat = (userId, result) => {
         result(null, res);
     });
 }
-Order.getOrderDrink = (userId, result) => {
-    sql.query(`SELECT * FROM all_order_seat where user_id = '${userId}'`, (err, res) => {
+Order.getOrderSeat = (userId, result) => {
+    sql.query(`SELECT * FROM all_order_seat where UIDD = '${userId}' ORDER BY Otime DESC`, (err, res) => {
         if (err) {
             console.log(err);
             result(err, null);
