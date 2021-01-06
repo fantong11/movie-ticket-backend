@@ -40,7 +40,7 @@ Order.getOrderDrink = (userId, result) => {
     });
 }
 Order.getOrderSeat = (userId, result) => {
-    sql.query(`SELECT * FROM all_order_seat where UIDD = '${userId}' ORDER BY Otime DESC`, (err, res) => {
+    sql.query(`SELECT * FROM all_order_seat where UIDD = '${userId}' ORDER BY OTime DESC`, (err, res) => {
         if (err) {
             console.log(err);
             result(err, null);
