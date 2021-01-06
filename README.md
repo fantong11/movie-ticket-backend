@@ -57,11 +57,12 @@
     ```sh
     git clone https://github.com/fantong11/movie-ticket-frontend.git
     ```
-3. 下載前端[Back-end](https://github.com/fantong11/movie-ticket-frontend)的部分
+3. 下載前端[Back-end](https://github.com/fantong11/movie-ticket-backend)的部分
     ```sh
     git clone https://github.com/fantong11/movie-ticket-backend.git
     ```
-4. 下載資料庫 MySQL8.0，在localhost資料庫建立`movie` 的database，並執行movie-ticket-backend/movie.sql來把資料都建立
+4. 把movie-ticket-backend/Movie.sql丟進Mysql Workbench 8.0執行，它會自動新增Database
+
 5.  在兩個專案的路徑下執行下列指令來安裝專案所需套件
     ```sh
     npm install
@@ -70,22 +71,26 @@
 
 ## 修改資料庫設定檔
 
-在movie-ticket-backend/app/config/db.config.js中，設定成自己資料庫，DB為database名字，範例如下：
+在movie-ticket-backend/.env中，設定成自己資料庫，範例如下：
 
-```js
-module.exports = {
-    HOST: "localhost",
-    USER: "admin",
-    PASSWORD: "1234",
-    DB: "movie",
-    PORT: "3306"
-};
+
+```sh
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=movie
+DB_USERNAME=root
+DB_PASSWORD=password
+
 ```
 - `HOST`: The hostname of the database you are connecting to. (Default: `localhost`)
 - `USER`: The MySQL user to authenticate as.
 - `PASSWORD`: The password of that MySQL user.
 - `DB`: Name of the database to use for this connection.
 - `PORT`: The port number to connect to. (Default: `3306`)
+
+DB_CONNECTION、DB_PORT和DB_DATABASE不用動，DB_USERNAME和DB_PASSWORD要改自己connection的username和password
+
 
 ## 執行專案
 
