@@ -12,7 +12,8 @@ const connection = mysql.createConnection({
 
 // open the MySQL connection
 connection.connect(error => {
-  console.log(dbConfig.HOST);
+  console.log(dbConfig.HOST + " 70986543678908765436");
+
   if (error) throw error;
   console.log("Successfully connected to the database.");
 });
