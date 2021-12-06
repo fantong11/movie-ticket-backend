@@ -17,6 +17,6 @@ app.use("/api", require("./app/routes/showing.routes.js"));
 app.use("/api", require("./app/routes/seat.routes.js"));
 
 // set port, listen for requests
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("Server is running on port 3000.");
 });

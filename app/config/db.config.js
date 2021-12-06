@@ -5,5 +5,5 @@ module.exports = {
     USER: process.env.USERNAME,
     PASSWORD: process.env.PASSWORD,
     DB: process.env.DATABASE,
-    PORT: 3306
+    PORT: process.env.DB_PORT
 };
