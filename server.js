@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors({
   origin: [
+    'http://localhost:8080',
     'https://movie-ticket-web.herokuapp.com/'],
 }))
 
