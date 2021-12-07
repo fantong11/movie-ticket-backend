@@ -11,7 +11,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors({
-  origin: ['http://localhost:8080'],
+  origin: [
+    'https://movie-ticket-web.herokuapp.com/'],
 }))
 
 app.use("/api", require("./app/routes/auth.routes.js"));
